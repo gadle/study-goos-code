@@ -47,6 +47,12 @@ public class Main implements SniperListener {
                 ui.showStatus(MainWindow.STATUS_LOST));
     }
 
+    @Override
+    public void sniperBidding() {
+        SwingUtilities.invokeLater(() ->
+                ui.showStatus(MainWindow.STATUS_BIDDING));
+    }
+
     private void disconnectWhenUICloses(final AbstractXMPPConnection connection) {
         ui.addWindowListener(new WindowAdapter() {
             @Override public void windowClosed(WindowEvent e) {
@@ -59,15 +65,22 @@ public class Main implements SniperListener {
             AbstractXMPPConnection connection,
             String itemId
     ) throws XMPPException, IOException, SmackException {
-
         disconnectWhenUICloses(connection);
 
-        final Chat chat = ChatManager.getInstanceFor(connection).createChat(
-                auctionId(itemId, connection),
-                new AuctionMessageTranslator(new AuctionSniper(this))
-        );
+        final Chat chat = ChatManager.getInstanceFor(connection).createChat(auctionId(itemId, connection));
         this.notToBeGCd = chat;
 
+        Auction auction = new Auction() {
+            public void bid(int amount) {
+                try {
+                    chat.sendMessage(String.format(BID_COMMAND_FORMAT, amount));
+                } catch (SmackException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+
+        chat.addMessageListener(new AuctionMessageTranslator(new AuctionSniper(auction, this)));
         chat.sendMessage(JOIN_COMMAND_FORMAT);
     }
 

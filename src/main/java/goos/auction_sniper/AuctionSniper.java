@@ -1,9 +1,11 @@
 package goos.auction_sniper;
 
 public class AuctionSniper implements AuctionEventListener {
+    private final Auction auction;
     private final SniperListener sniperListener;
 
-    public AuctionSniper(SniperListener sniperListener) {
+    public AuctionSniper(Auction auction, SniperListener sniperListener) {
+        this.auction = auction;
         this.sniperListener = sniperListener;
     }
 
@@ -14,5 +16,7 @@ public class AuctionSniper implements AuctionEventListener {
 
     @Override
     public void currentPrice(int price, int increment) {
+        auction.bid(price + increment);
+        sniperListener.sniperBidding();
     }
 }

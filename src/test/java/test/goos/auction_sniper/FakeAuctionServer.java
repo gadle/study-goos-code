@@ -1,5 +1,6 @@
-package goos.auction_sniper;
+package test.goos.auction_sniper;
 
+import goos.auction_sniper.Main;
 import org.hamcrest.Matcher;
 import org.jivesoftware.smack.AbstractXMPPConnection;
 import org.jivesoftware.smack.ConnectionConfiguration;

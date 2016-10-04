@@ -1,4 +1,4 @@
-package goos.auction_sniper;
+package test.goos.auction_sniper;
 
 import org.hamcrest.Matcher;
 import org.jivesoftware.smack.chat.Chat;

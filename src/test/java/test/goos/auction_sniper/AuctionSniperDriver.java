@@ -1,9 +1,10 @@
-package goos.auction_sniper;
+package test.goos.auction_sniper;
 
 import com.objogate.wl.swing.AWTEventQueueProber;
 import com.objogate.wl.swing.driver.JFrameDriver;
 import com.objogate.wl.swing.driver.JLabelDriver;
 import com.objogate.wl.swing.gesture.GesturePerformer;
+import goos.auction_sniper.MainWindow;
 
 import static org.hamcrest.Matchers.*;
 

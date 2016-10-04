@@ -1,4 +1,7 @@
-package goos.auction_sniper;
+package test.goos.auction_sniper;
+
+import goos.auction_sniper.Main;
+import goos.auction_sniper.MainWindow;
 
 public class ApplicationRunner {
     public static final String SNIPER_ID = "sniper";

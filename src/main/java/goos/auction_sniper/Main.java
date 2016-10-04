@@ -14,7 +14,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.IOException;
 
-public class Main implements AuctionEventListener {
+public class Main implements SniperListener {
     private static final int ARG_HOSTNAME = 0;
     private static final int ARG_USERNAME = 1;
     private static final int ARG_PASSWORD = 2;
@@ -42,14 +42,9 @@ public class Main implements AuctionEventListener {
     }
 
     @Override
-    public void auctionClosed() {
+    public void sniperLost() {
         SwingUtilities.invokeLater(() ->
                 ui.showStatus(MainWindow.STATUS_LOST));
-    }
-
-    @Override
-    public void currentPrice(int price, int increment) {
-
     }
 
     private void disconnectWhenUICloses(final AbstractXMPPConnection connection) {
@@ -69,7 +64,7 @@ public class Main implements AuctionEventListener {
 
         final Chat chat = ChatManager.getInstanceFor(connection).createChat(
                 auctionId(itemId, connection),
-                new AuctionMessageTranslator(this)
+                new AuctionMessageTranslator(new AuctionSniper(this))
         );
         this.notToBeGCd = chat;
 

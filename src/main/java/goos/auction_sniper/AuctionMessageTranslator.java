@@ -1,5 +1,6 @@
 package goos.auction_sniper;
 
+import goos.auction_sniper.AuctionEventListener.PriceSource;
 import org.jivesoftware.smack.chat.Chat;
 import org.jivesoftware.smack.chat.ChatMessageListener;
 import org.jivesoftware.smack.packet.Message;
@@ -9,8 +10,10 @@ import java.util.Map;
 
 public class AuctionMessageTranslator implements ChatMessageListener {
     private final AuctionEventListener listener;
+    private final String sniperId;
 
-    public AuctionMessageTranslator(AuctionEventListener listener) {
+    public AuctionMessageTranslator(String sniperId, AuctionEventListener listener) {
+        this.sniperId = sniperId;
         this.listener = listener;
     }
 
@@ -21,7 +24,7 @@ public class AuctionMessageTranslator implements ChatMessageListener {
         if ("CLOSE".equals(eventType)) {
             listener.auctionClosed();
         } else if ("PRICE".equals(eventType)) {
-            listener.currentPrice(event.currentPrice(), event.increment());
+            listener.currentPrice(event.currentPrice(), event.increment(), event.isFrom(sniperId));
         }
     }
 
@@ -40,12 +43,20 @@ public class AuctionMessageTranslator implements ChatMessageListener {
             return getInt("Increment");
         }
 
+        public PriceSource isFrom(String sniperId) {
+            return sniperId.equals(bidder()) ? PriceSource.FromSniper : PriceSource.FromOtherBidder;
+        }
+
         private int getInt(String fieldName) {
             return Integer.parseInt(get(fieldName));
         }
 
         private String get(String fieldName) {
             return fields.get(fieldName);
+        }
+
+        private String bidder() {
+            return get("Bidder");
         }
 
         private void addField(String field) {

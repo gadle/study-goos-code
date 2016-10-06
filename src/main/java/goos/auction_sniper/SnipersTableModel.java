@@ -31,6 +31,11 @@ public class SnipersTableModel extends AbstractTableModel implements
     }
 
     @Override
+    public String getColumnName(int column) {
+        return Column.at(column).name;
+    }
+
+    @Override
     public void sniperStateChanged(SniperSnapshot snapshot) {
         this.snapshot = snapshot;
         fireTableRowsUpdated(0, 0);
@@ -41,30 +46,36 @@ public class SnipersTableModel extends AbstractTableModel implements
     }
 
     public enum Column {
-        ITEM_IDENTIFIER {
+        ITEM_IDENTIFIER("Item") {
             @Override
             public Object valueIn(SniperSnapshot snapshot) {
                 return snapshot.itemId;
             }
         },
-        LAST_PRICE {
+        LAST_PRICE("Last Price") {
             @Override
             public Object valueIn(SniperSnapshot snapshot) {
                 return snapshot.lastPrice;
             }
         },
-        LAST_BID {
+        LAST_BID("Last Bid") {
             @Override
             public Object valueIn(SniperSnapshot snapshot) {
                 return snapshot.lastBid;
             }
         },
-        SNIPER_STATUS {
+        SNIPER_STATUS("State") {
             @Override
             public Object valueIn(SniperSnapshot snapshot) {
                 return textFor(snapshot.state);
             }
         };
+
+        Column(String name) {
+            this.name = name;
+        }
+
+        public final String name;
 
         public static Column at(int offset) {
             return values()[offset];

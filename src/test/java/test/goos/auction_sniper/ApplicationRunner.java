@@ -1,6 +1,7 @@
 package test.goos.auction_sniper;
 
 import goos.auction_sniper.Main;
+import goos.auction_sniper.MainWindow;
 import goos.auction_sniper.SniperState;
 
 import static goos.auction_sniper.SnipersTableModel.textFor;
@@ -31,7 +32,9 @@ public class ApplicationRunner {
         thread.start();
 
         driver = new AuctionSniperDriver(1000);
-        driver.showsSniperStatus(textFor(SniperState.JOINING));
+        driver.hasTitle(MainWindow.APPLICATION_TITLE);
+        driver.hasColumnTitles();
+        driver.showsSniperStatus(textFor(SniperState.JOINING)); /* TODO needs refactoring */
     }
 
     public void showsSniperHasLostAuction() {

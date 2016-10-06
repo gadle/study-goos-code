@@ -49,11 +49,6 @@ public class SnipersTableModel extends AbstractTableModel {
         fireTableRowsUpdated(0, 0);
     }
 
-    public void setState(String state) {
-        this.state = state;
-        fireTableRowsUpdated(0, 0);
-    }
-
     public enum Column {
         ITEM_IDENTIFIER,
         LAST_PRICE,

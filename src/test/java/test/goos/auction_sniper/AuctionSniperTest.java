@@ -18,14 +18,16 @@ public class AuctionSniperTest {
     @Test public void reportsLostIfAuctionClosesImmediately() {
         sniper.auctionClosed();
 
-        verify(sniperListener, atLeastOnce()).sniperLost();
+        verify(sniperListener, atLeastOnce()).sniperStateChanged(
+                new SniperSnapshot(ITEM_ID, 0, 0, SniperState.LOST));
     }
 
     @Test public void reportsLostIfAuctionClosesWhenBidding() {
         sniper.currentPrice(123, 45, PriceSource.FromOtherBidder);
         sniper.auctionClosed();
 
-        verify(sniperListener, atLeastOnce()).sniperLost();
+        verify(sniperListener, atLeastOnce()).sniperStateChanged(
+                new SniperSnapshot(ITEM_ID, 123, 168, SniperState.LOST));
         assertEquals(ObservedSniperState.bidding, sniperState);
     }
 
@@ -50,10 +52,12 @@ public class AuctionSniperTest {
     }
 
     @Test public void reportsWonIfAuctionClosesWhenWinning() {
-        sniper.currentPrice(123,45, PriceSource.FromSniper);
+        sniper.currentPrice(123, 12, PriceSource.FromOtherBidder);
+        sniper.currentPrice(135, 45, PriceSource.FromSniper);
         sniper.auctionClosed();
 
-        verify(sniperListener, atLeastOnce()).sniperWon();
+        verify(sniperListener, atLeastOnce()).sniperStateChanged(
+                new SniperSnapshot(ITEM_ID, 135, 135, SniperState.WON));
         assertEquals(ObservedSniperState.winning, sniperState);
     }
 
@@ -65,11 +69,6 @@ public class AuctionSniperTest {
     private enum ObservedSniperState { idle, bidding, winning }
 
     private class SniperListenerStub implements SniperListener {
-        public void sniperLost() {}
-
-        @Override
-        public void sniperWon() {
-        }
 
         @Override
         public void sniperStateChanged(SniperSnapshot sniperSnapshot) {

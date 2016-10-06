@@ -62,7 +62,7 @@ public class Main {
 
         chat.addMessageListener(new AuctionMessageTranslator(
                 connection.getUser(),
-                new AuctionSniper(auction, new SniperStateDisplayer())));
+                new AuctionSniper(itemId, auction, new SniperStateDisplayer())));
         auction.join();
     }
 
@@ -98,18 +98,13 @@ public class Main {
         }
 
         @Override
-        public void sniperBidding() {
-            showStatus(MainWindow.STATUS_BIDDING);
-        }
-
-        @Override
-        public void sniperWinning() {
-            showStatus(MainWindow.STATUS_WINNING);
-        }
-
-        @Override
         public void sniperWon() {
             showStatus(MainWindow.STATUS_WON);
+        }
+
+        @Override
+        public void sniperStateChanged(SniperSnapshot sniperSnapshot) {
+            SwingUtilities.invokeLater(() -> ui.sniperStatusChanged(sniperSnapshot));
         }
 
         private void showStatus(final String status) {

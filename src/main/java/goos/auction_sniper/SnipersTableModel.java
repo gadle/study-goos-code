@@ -2,7 +2,8 @@ package goos.auction_sniper;
 
 import javax.swing.table.AbstractTableModel;
 
-public class SnipersTableModel extends AbstractTableModel {
+public class SnipersTableModel extends AbstractTableModel implements
+        SniperListener {
     private final static SniperSnapshot STARTING_UP = new SniperSnapshot("", 0, 0, SniperState.JOINING);
     private final static String[] STATUS_TEXT = {
         "Joining",
@@ -29,7 +30,8 @@ public class SnipersTableModel extends AbstractTableModel {
         return Column.at(columnIndex).valueIn(snapshot);
     }
 
-    public void sniperStatusChanged(SniperSnapshot snapshot) {
+    @Override
+    public void sniperStateChanged(SniperSnapshot snapshot) {
         this.snapshot = snapshot;
         fireTableRowsUpdated(0, 0);
     }

@@ -30,7 +30,7 @@ public class SnipersTableModelTest {
     }
 
     @Test public void setsSniperValuesInColumns() {
-        model.sniperStatusChanged(new SniperSnapshot("item id", 555, 666, SniperState.BIDDING));
+        model.sniperStateChanged(new SniperSnapshot("item id", 555, 666, SniperState.BIDDING));
 
         verify(listener).tableChanged(MockitoHamcrest.argThat(aRowChangedEvent()));
         assertColumnEquals(Column.ITEM_IDENTIFIER, "item id");

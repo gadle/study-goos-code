@@ -27,6 +27,7 @@ public class Main {
     public static final String JOIN_COMMAND_FORMAT = "SOLVersion: 1.1; Command: JOIN;";
     public static final String BID_COMMAND_FORMAT = "SOLVersion: 1.1; Command: BID; Price: %d;";
 
+    private final SnipersTableModel snipers = new SnipersTableModel();
     private MainWindow ui;
 
     @SuppressWarnings("unused") private Chat notToBeGCd;
@@ -62,7 +63,7 @@ public class Main {
 
         chat.addMessageListener(new AuctionMessageTranslator(
                 connection.getUser(),
-                new AuctionSniper(itemId, auction, new SniperStateDisplayer())));
+                new AuctionSniper(itemId, auction, new SwingThreadSniperListener(snipers))));
         auction.join();
     }
 
@@ -87,15 +88,20 @@ public class Main {
 
     private void startUserInterface() throws Exception {
         SwingUtilities.invokeAndWait(() -> {
-            ui = new MainWindow();
+            ui = new MainWindow(snipers);
         });
     }
 
-    public class SniperStateDisplayer implements SniperListener {
+    public class SwingThreadSniperListener implements SniperListener {
+        private final SniperListener listener;
+
+        public SwingThreadSniperListener(SniperListener listener) {
+            this.listener = listener;
+        }
 
         @Override
         public void sniperStateChanged(SniperSnapshot sniperSnapshot) {
-            SwingUtilities.invokeLater(() -> ui.sniperStatusChanged(sniperSnapshot));
+            SwingUtilities.invokeLater(() -> listener.sniperStateChanged(sniperSnapshot));
         }
 
     }

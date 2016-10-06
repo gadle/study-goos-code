@@ -9,10 +9,11 @@ public class MainWindow extends JFrame {
     public static final String MAIN_WINDOW_NAME = "Auction Sniper Main";
     private static final String SNIPERS_TABLE_NAME = "snipers table";
 
-    private final SnipersTableModel snipers = new SnipersTableModel();
+    private final SnipersTableModel snipers;
 
-    public MainWindow() throws HeadlessException {
+    public MainWindow(SnipersTableModel snipers) throws HeadlessException {
         super(APPLICATION_TITLE);
+        this.snipers = snipers;
         setName(MAIN_WINDOW_NAME);
         fillContentPane(makeSnipersTable());
         pack();
@@ -31,9 +32,5 @@ public class MainWindow extends JFrame {
         snipersTable.setName(SNIPERS_TABLE_NAME);
         return snipersTable;
 
-    }
-
-    public void sniperStatusChanged(SniperSnapshot state) {
-        snipers.sniperStatusChanged(state);
     }
 }

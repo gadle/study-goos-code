@@ -1,6 +1,5 @@
 package test.goos.auction_sniper;
 
-import goos.auction_sniper.MainWindow;
 import goos.auction_sniper.SniperSnapshot;
 import goos.auction_sniper.SniperState;
 import goos.auction_sniper.SnipersTableModel;
@@ -13,10 +12,9 @@ import org.mockito.hamcrest.MockitoHamcrest;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 
-import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.samePropertyValuesAs;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
+import static goos.auction_sniper.SnipersTableModel.textFor;
+import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 
 public class SnipersTableModelTest {
@@ -38,7 +36,7 @@ public class SnipersTableModelTest {
         assertColumnEquals(Column.ITEM_IDENTIFIER, "item id");
         assertColumnEquals(Column.LAST_PRICE, 555);
         assertColumnEquals(Column.LAST_BID, 666);
-        assertColumnEquals(Column.SNIPER_STATUS, MainWindow.STATUS_BIDDING);
+        assertColumnEquals(Column.SNIPER_STATUS, textFor(SniperState.BIDDING));
     }
 
     private void assertColumnEquals(Column column, Object expected) {

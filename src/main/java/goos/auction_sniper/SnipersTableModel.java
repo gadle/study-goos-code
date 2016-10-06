@@ -2,19 +2,16 @@ package goos.auction_sniper;
 
 import javax.swing.table.AbstractTableModel;
 
-import static goos.auction_sniper.MainWindow.*;
-
 public class SnipersTableModel extends AbstractTableModel {
-    private final static SniperSnapshot STARTING_UP = new SniperSnapshot("", 0, 0, SniperState.BIDDING);
+    private final static SniperSnapshot STARTING_UP = new SniperSnapshot("", 0, 0, SniperState.JOINING);
     private final static String[] STATUS_TEXT = {
-        MainWindow.STATUS_JOINING,
-        MainWindow.STATUS_BIDDING,
-        MainWindow.STATUS_WINNING,
-        MainWindow.STATUS_LOST,
-        MainWindow.STATUS_WON
+        "Joining",
+        "Bidding",
+        "Winning",
+        "Lost",
+        "Won"
     };
 
-    private String state = STATUS_JOINING;
     private SniperSnapshot snapshot = STARTING_UP;
 
     @Override
@@ -37,7 +34,7 @@ public class SnipersTableModel extends AbstractTableModel {
             case LAST_BID:
                 return snapshot.lastBid;
             case SNIPER_STATUS:
-                return state;
+                return textFor(snapshot.state);
             default:
                 throw new IllegalArgumentException("No column at " + columnIndex);
         }
@@ -45,8 +42,11 @@ public class SnipersTableModel extends AbstractTableModel {
 
     public void sniperStatusChanged(SniperSnapshot snapshot) {
         this.snapshot = snapshot;
-        this.state = STATUS_TEXT[snapshot.state.ordinal()];
         fireTableRowsUpdated(0, 0);
+    }
+
+    public static String textFor(SniperState state) {
+        return STATUS_TEXT[state.ordinal()];
     }
 
     public enum Column {

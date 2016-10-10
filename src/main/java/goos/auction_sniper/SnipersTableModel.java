@@ -1,10 +1,11 @@
 package goos.auction_sniper;
 
 import javax.swing.table.AbstractTableModel;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SnipersTableModel extends AbstractTableModel implements
         SniperListener {
-    private final static SniperSnapshot STARTING_UP = new SniperSnapshot("", 0, 0, SniperState.JOINING);
     private final static String[] STATUS_TEXT = {
         "Joining",
         "Bidding",
@@ -13,11 +14,11 @@ public class SnipersTableModel extends AbstractTableModel implements
         "Won"
     };
 
-    private SniperSnapshot snapshot = STARTING_UP;
+    private List<SniperSnapshot> snapshots = new ArrayList<>();
 
     @Override
     public int getRowCount() {
-        return 1;
+        return snapshots.size();
     }
 
     @Override
@@ -27,7 +28,7 @@ public class SnipersTableModel extends AbstractTableModel implements
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
-        return Column.at(columnIndex).valueIn(snapshot);
+        return Column.at(columnIndex).valueIn(snapshots.get(rowIndex));
     }
 
     @Override
@@ -37,12 +38,28 @@ public class SnipersTableModel extends AbstractTableModel implements
 
     @Override
     public void sniperStateChanged(SniperSnapshot snapshot) {
-        this.snapshot = snapshot;
-        fireTableRowsUpdated(0, 0);
+        int row = rowMatching(snapshot);
+        snapshots.set(row, snapshot);
+        fireTableRowsUpdated(row, row);
     }
 
     public static String textFor(SniperState state) {
         return STATUS_TEXT[state.ordinal()];
+    }
+
+    public void addSniper(SniperSnapshot snapshot) {
+        snapshots.add(snapshot);
+        int newRow = snapshots.size() - 1;
+        fireTableRowsInserted(newRow, newRow);
+    }
+
+    private int rowMatching(SniperSnapshot snapshot) {
+        for (int i = 0; i < snapshots.size(); i++) {
+            if (snapshot.isForSameItemAs(snapshots.get(i))) {
+                return i;
+            }
+        }
+        throw new Defect("Cannot find match for " + snapshot);
     }
 
     public enum Column {

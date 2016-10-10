@@ -2,14 +2,14 @@ package test.goos.auction_sniper;
 
 import com.objogate.wl.swing.probe.ValueMatcherProbe;
 import goos.auction_sniper.MainWindow;
-import goos.auction_sniper.SnipersTableModel;
+import goos.auction_sniper.SniperPortfolio;
 import org.junit.Test;
 
 import static org.hamcrest.Matchers.*;
 
 public class MainWindowTest {
-    private final SnipersTableModel tableModel = new SnipersTableModel();
-    private final MainWindow mainWindow = new MainWindow(tableModel);
+    private final SniperPortfolio portfolio = new SniperPortfolio();
+    private final MainWindow mainWindow = new MainWindow(portfolio);
 
     private final AuctionSniperDriver driver = new AuctionSniperDriver(1000);
 

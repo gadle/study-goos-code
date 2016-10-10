@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SnipersTableModel extends AbstractTableModel
-        implements SniperListener, SniperCollector {
+        implements SniperListener, PortfolioListener {
     private final static String[] STATUS_TEXT = {
         "Joining",
         "Bidding",
@@ -15,7 +15,6 @@ public class SnipersTableModel extends AbstractTableModel
     };
 
     private List<SniperSnapshot> snapshots = new ArrayList<>();
-    private final List<AuctionSniper> notToBeGCd = new ArrayList<>();
 
     @Override
     public int getRowCount() {
@@ -45,8 +44,7 @@ public class SnipersTableModel extends AbstractTableModel
     }
 
     @Override
-    public void addSniper(AuctionSniper sniper) {
-        notToBeGCd.add(sniper);
+    public void sniperAdded(AuctionSniper sniper) {
         addSniperSnapshot(sniper.snapshot());
         sniper.addSniperListener(new SwingThreadSniperListener(this));
     }

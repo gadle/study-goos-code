@@ -2,7 +2,7 @@ package test.goos.auction_sniper;
 
 import goos.auction_sniper.AuctionEventListener;
 import goos.auction_sniper.AuctionEventListener.PriceSource;
-import goos.auction_sniper.AuctionMessageTranslator;
+import goos.auction_sniper.xmpp.AuctionMessageTranslator;
 import org.jivesoftware.smack.chat.Chat;
 import org.jivesoftware.smack.packet.Message;
 import org.junit.Test;

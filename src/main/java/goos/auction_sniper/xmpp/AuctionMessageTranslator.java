@@ -1,5 +1,6 @@
-package goos.auction_sniper;
+package goos.auction_sniper.xmpp;
 
+import goos.auction_sniper.AuctionEventListener;
 import goos.auction_sniper.AuctionEventListener.PriceSource;
 import org.jivesoftware.smack.chat.Chat;
 import org.jivesoftware.smack.chat.ChatMessageListener;

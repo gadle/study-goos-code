@@ -1,6 +1,6 @@
 package test.goos.auction_sniper;
 
-import goos.auction_sniper.Main;
+import goos.auction_sniper.xmpp.XMPPAuction;
 import org.hamcrest.Matcher;
 import org.jivesoftware.smack.AbstractXMPPConnection;
 import org.jivesoftware.smack.ConnectionConfiguration;
@@ -14,8 +14,8 @@ import org.jivesoftware.smack.tcp.XMPPTCPConnectionConfiguration;
 
 import java.io.IOException;
 
-import static org.hamcrest.Matchers.equalTo;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.*;
 
 public class FakeAuctionServer {
     public static final String ITEM_ID_AS_LOGIN = "auction-%s";
@@ -50,11 +50,11 @@ public class FakeAuctionServer {
     }
 
     public void hasReceivedJoinRequestFrom(String sniperId) throws InterruptedException {
-        receivesAMessageMatching(sniperId, equalTo(Main.JOIN_COMMAND_FORMAT));
+        receivesAMessageMatching(sniperId, equalTo(XMPPAuction.JOIN_COMMAND_FORMAT));
     }
 
     public void hasReceivedBid(int bid, String sniperId) throws InterruptedException {
-        receivesAMessageMatching(sniperId, equalTo(String.format(Main.BID_COMMAND_FORMAT, bid)));
+        receivesAMessageMatching(sniperId, equalTo(String.format(XMPPAuction.BID_COMMAND_FORMAT, bid)));
     }
 
     private void receivesAMessageMatching(

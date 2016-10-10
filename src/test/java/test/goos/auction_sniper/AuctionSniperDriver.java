@@ -3,7 +3,7 @@ package test.goos.auction_sniper;
 import com.objogate.wl.swing.AWTEventQueueProber;
 import com.objogate.wl.swing.driver.*;
 import com.objogate.wl.swing.gesture.GesturePerformer;
-import goos.auction_sniper.MainWindow;
+import goos.auction_sniper.ui.MainWindow;
 
 import javax.swing.*;
 import javax.swing.table.JTableHeader;

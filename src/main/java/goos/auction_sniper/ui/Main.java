@@ -1,5 +1,8 @@
-package goos.auction_sniper;
+package goos.auction_sniper.ui;
 
+import goos.auction_sniper.AuctionHouse;
+import goos.auction_sniper.SniperLauncher;
+import goos.auction_sniper.SniperPortfolio;
 import goos.auction_sniper.xmpp.XMPPAuctionHouse;
 
 import javax.swing.*;

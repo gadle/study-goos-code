@@ -1,4 +1,6 @@
-package goos.auction_sniper;
+package goos.auction_sniper.ui;
+
+import goos.auction_sniper.*;
 
 import javax.swing.table.AbstractTableModel;
 import java.util.ArrayList;

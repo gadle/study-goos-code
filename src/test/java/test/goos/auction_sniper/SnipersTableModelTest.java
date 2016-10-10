@@ -2,8 +2,8 @@ package test.goos.auction_sniper;
 
 import goos.auction_sniper.Defect;
 import goos.auction_sniper.SniperSnapshot;
-import goos.auction_sniper.SnipersTableModel;
-import goos.auction_sniper.SnipersTableModel.Column;
+import goos.auction_sniper.ui.SnipersTableModel;
+import goos.auction_sniper.ui.SnipersTableModel.Column;
 import org.hamcrest.Matcher;
 import org.junit.Before;
 import org.junit.Test;
@@ -12,7 +12,7 @@ import org.mockito.hamcrest.MockitoHamcrest;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 
-import static goos.auction_sniper.SnipersTableModel.textFor;
+import static goos.auction_sniper.ui.SnipersTableModel.textFor;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;

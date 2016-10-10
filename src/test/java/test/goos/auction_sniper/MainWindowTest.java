@@ -1,7 +1,7 @@
 package test.goos.auction_sniper;
 
 import com.objogate.wl.swing.probe.ValueMatcherProbe;
-import goos.auction_sniper.MainWindow;
+import goos.auction_sniper.ui.MainWindow;
 import goos.auction_sniper.SniperPortfolio;
 import org.junit.Test;
 

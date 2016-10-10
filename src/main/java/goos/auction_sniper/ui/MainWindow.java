@@ -1,5 +1,7 @@
-package goos.auction_sniper;
+package goos.auction_sniper.ui;
 
+import goos.auction_sniper.SniperPortfolio;
+import goos.auction_sniper.UserRequestListener;
 import goos.auction_sniper.util.Announcer;
 
 import javax.swing.*;

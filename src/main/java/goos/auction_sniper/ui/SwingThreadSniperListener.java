@@ -1,4 +1,7 @@
-package goos.auction_sniper;
+package goos.auction_sniper.ui;
+
+import goos.auction_sniper.SniperListener;
+import goos.auction_sniper.SniperSnapshot;
 
 import javax.swing.*;
 

@@ -4,8 +4,8 @@ import javax.swing.table.AbstractTableModel;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SnipersTableModel extends AbstractTableModel implements
-        SniperListener {
+public class SnipersTableModel extends AbstractTableModel
+        implements SniperListener, SniperCollector {
     private final static String[] STATUS_TEXT = {
         "Joining",
         "Bidding",
@@ -15,6 +15,7 @@ public class SnipersTableModel extends AbstractTableModel implements
     };
 
     private List<SniperSnapshot> snapshots = new ArrayList<>();
+    private final List<AuctionSniper> notToBeGCd = new ArrayList<>();
 
     @Override
     public int getRowCount() {
@@ -43,14 +44,21 @@ public class SnipersTableModel extends AbstractTableModel implements
         fireTableRowsUpdated(row, row);
     }
 
-    public static String textFor(SniperState state) {
-        return STATUS_TEXT[state.ordinal()];
+    @Override
+    public void addSniper(AuctionSniper sniper) {
+        notToBeGCd.add(sniper);
+        addSniperSnapshot(sniper.snapshot());
+        sniper.addSniperListener(new SwingThreadSniperListener(this));
     }
 
-    public void addSniper(SniperSnapshot snapshot) {
+    public void addSniperSnapshot(SniperSnapshot snapshot) {
         snapshots.add(snapshot);
-        int newRow = snapshots.size() - 1;
-        fireTableRowsInserted(newRow, newRow);
+        int row = snapshots.size() - 1;
+        fireTableRowsInserted(row, row);
+    }
+
+    public static String textFor(SniperState state) {
+        return STATUS_TEXT[state.ordinal()];
     }
 
     private int rowMatching(SniperSnapshot snapshot) {

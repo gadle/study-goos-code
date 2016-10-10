@@ -33,7 +33,7 @@ public class SnipersTableModelTest {
         SniperSnapshot joining = SniperSnapshot.joining("item id");
         SniperSnapshot bidding = joining.bidding(555, 666);
 
-        model.addSniper(joining);
+        model.addSniperSnapshot(joining);
         model.sniperStateChanged(bidding);
 
         assertRowMatchesSnapshot(0, bidding);
@@ -51,7 +51,7 @@ public class SnipersTableModelTest {
 
         assertEquals(0, model.getRowCount());
 
-        model.addSniper(joining);
+        model.addSniperSnapshot(joining);
 
         assertEquals(1, model.getRowCount());
         assertRowMatchesSnapshot(0, joining);
@@ -60,8 +60,8 @@ public class SnipersTableModelTest {
     }
 
     @Test public void holdsSnipersInAdditionOrder() {
-        model.addSniper(SniperSnapshot.joining("item 0"));
-        model.addSniper(SniperSnapshot.joining("item 1"));
+        model.addSniperSnapshot(SniperSnapshot.joining("item 0"));
+        model.addSniperSnapshot(SniperSnapshot.joining("item 1"));
 
         assertEquals("item 0", cellValue(0, Column.ITEM_IDENTIFIER));
         assertEquals("item 1", cellValue(1, Column.ITEM_IDENTIFIER));
@@ -71,8 +71,8 @@ public class SnipersTableModelTest {
         SniperSnapshot snapshot0 = SniperSnapshot.joining("item 0");
         SniperSnapshot snapshot1 = SniperSnapshot.joining("item 1");
 
-        model.addSniper(snapshot0);
-        model.addSniper(snapshot1);
+        model.addSniperSnapshot(snapshot0);
+        model.addSniperSnapshot(snapshot1);
 
         snapshot0 = snapshot0.bidding(555, 666);
         model.sniperStateChanged(snapshot0);
@@ -86,7 +86,7 @@ public class SnipersTableModelTest {
         SniperSnapshot snapshot0 = SniperSnapshot.joining("item 0");
         SniperSnapshot snapshot1 = SniperSnapshot.joining("item 1");
 
-        model.addSniper(snapshot0);
+        model.addSniperSnapshot(snapshot0);
 
         snapshot1 = snapshot1.bidding(555, 666);
         model.sniperStateChanged(snapshot1);

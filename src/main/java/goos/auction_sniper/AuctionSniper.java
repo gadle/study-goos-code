@@ -1,15 +1,24 @@
 package goos.auction_sniper;
 
+import goos.auction_sniper.util.Announcer;
+
 public class AuctionSniper implements AuctionEventListener {
     private final Auction auction;
-    private final SniperListener sniperListener;
+    private final Announcer<SniperListener> sniperListeners = Announcer.to(SniperListener.class);
     private SniperSnapshot snapshot;
 
-    public AuctionSniper(String itemId, Auction auction, SniperListener sniperListener) {
+    public AuctionSniper(String itemId, Auction auction) {
         this.auction = auction;
-        this.sniperListener = sniperListener;
         this.snapshot = SniperSnapshot.joining(itemId);
         notifyChange();
+    }
+
+    public void addSniperListener(SniperListener listener) {
+        sniperListeners.addListener(listener);
+    }
+
+    public SniperSnapshot snapshot() {
+        return snapshot;
     }
 
     @Override
@@ -34,6 +43,6 @@ public class AuctionSniper implements AuctionEventListener {
     }
 
     private void notifyChange() {
-        sniperListener.sniperStateChanged(snapshot);
+        sniperListeners.announce().sniperStateChanged(snapshot);
     }
 }

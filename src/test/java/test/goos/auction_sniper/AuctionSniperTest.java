@@ -2,18 +2,23 @@ package test.goos.auction_sniper;
 
 import goos.auction_sniper.*;
 import goos.auction_sniper.AuctionEventListener.PriceSource;
+import org.junit.Before;
 import org.junit.Test;
 
-import static org.mockito.Mockito.*;
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
 public class AuctionSniperTest {
     private static final String ITEM_ID = "1234556789";
     private final SniperListener sniperListener = spy(new SniperListenerStub());
     private final Auction auction = mock(Auction.class);
-    private final AuctionSniper sniper = new AuctionSniper(ITEM_ID, auction, sniperListener);
+    private final AuctionSniper sniper = new AuctionSniper(ITEM_ID, auction);
 
     private ObservedSniperState sniperState = ObservedSniperState.idle;
+
+    @Before public void attachListener() {
+        sniper.addSniperListener(sniperListener);
+    }
 
     @Test public void reportsLostIfAuctionClosesImmediately() {
         sniper.auctionClosed();

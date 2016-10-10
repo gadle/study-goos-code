@@ -21,7 +21,6 @@ public class Main {
     private static final int ARG_HOSTNAME = 0;
     private static final int ARG_USERNAME = 1;
     private static final int ARG_PASSWORD = 2;
-    private static final int ARG_FIRST_ITEM_ID = 3;
 
     public static final String AUCTION_RESOURCE = "Auction";
     public static final String ITEM_ID_AS_LOGIN = "auction-%s";
@@ -44,9 +43,7 @@ public class Main {
 
         AbstractXMPPConnection connection = connection(args[ARG_HOSTNAME], args[ARG_USERNAME], args[ARG_PASSWORD]);
         main.disconnectWhenUICloses(connection);
-        for (int i = ARG_FIRST_ITEM_ID; i < args.length; i++) {
-            main.joinAuction(connection, args[i]);
-        }
+        main.addUserRequestListenerFor(connection);
     }
 
     private void disconnectWhenUICloses(final AbstractXMPPConnection connection) {
@@ -57,24 +54,21 @@ public class Main {
         });
     }
 
-    private void joinAuction(
-            AbstractXMPPConnection connection,
-            String itemId
-    ) throws XMPPException, IOException, SmackException, InterruptedException, InvocationTargetException {
-        safelyAddItemToModel(itemId);
-        final Chat chat = ChatManager.getInstanceFor(connection).createChat(auctionId(itemId, connection));
-        this.notToBeGCd.add(chat);
+    private void addUserRequestListenerFor(final AbstractXMPPConnection connection) {
+        ui.addUserRequestListener(itemId -> {
+            snipers.addSniper(SniperSnapshot.joining(itemId));
 
-        Auction auction = new XMPPAuction(chat);
+            final Chat chat = ChatManager.getInstanceFor(connection).createChat(auctionId(itemId, connection));
+            notToBeGCd.add(chat);
 
-        chat.addMessageListener(new AuctionMessageTranslator(
-                connection.getUser(),
-                new AuctionSniper(itemId, auction, new SwingThreadSniperListener(snipers))));
-        auction.join();
-    }
+            Auction auction = new XMPPAuction(chat);
 
-    private void safelyAddItemToModel(String itemId) throws InterruptedException, InvocationTargetException {
-        SwingUtilities.invokeAndWait(() -> snipers.addSniper(SniperSnapshot.joining(itemId)));
+            chat.addMessageListener(new AuctionMessageTranslator(
+                    connection.getUser(),
+                    new AuctionSniper(itemId, auction, new SwingThreadSniperListener(snipers))));
+            auction.join();
+
+        });
     }
 
     private static AbstractXMPPConnection connection(

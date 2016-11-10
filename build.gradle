@@ -1,7 +1,15 @@
+plugins {
+    id 'net.ltgt.apt' version '0.9'
+}
+
 group 'goos.auction-sniper'
 version 'DEV'
 
 apply plugin: 'java'
+
+// Needed for annotation processing. Some IDE configuration is also needed.
+// See https://github.com/tbroyer/gradle-apt-plugin
+apply plugin: 'idea'
 
 sourceCompatibility = 1.8
 
@@ -17,6 +25,9 @@ dependencies {
     compile group: 'org.igniterealtime.smack', name: 'smack-java7', version: '4.1.8'
 
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.4'
+
+    compileOnly group: 'com.google.auto.value', name: 'auto-value', version: '1.2'
+    apt         group: 'com.google.auto.value', name: 'auto-value', version: '1.2'
 
     // https://mvnrepository.com/artifact/com.googlecode.windowlicker/windowlicker-swing
     testCompile group: 'com.googlecode.windowlicker', name: 'windowlicker-swing', version: 'r268'

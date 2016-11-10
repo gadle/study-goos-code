@@ -10,7 +10,6 @@ import javax.swing.table.JTableHeader;
 
 import static com.objogate.wl.swing.matcher.IterableComponentsMatcher.matching;
 import static com.objogate.wl.swing.matcher.JLabelTextMatcher.withLabelText;
-import static org.hamcrest.Matchers.*;
 
 public class AuctionSniperDriver extends JFrameDriver {
     public AuctionSniperDriver(int timeoutMillis) {
@@ -19,10 +18,6 @@ public class AuctionSniperDriver extends JFrameDriver {
                         named(MainWindow.MAIN_WINDOW_NAME),
                         showingOnScreen()),
                 new AWTEventQueueProber(timeoutMillis, 100));
-    }
-
-    public void showsSniperStatus(String statusText) {
-        new JTableDriver(this).hasCell(withLabelText(equalTo(statusText)));
     }
 
     public void showsSniperStatus(String itemId, int lastPrice, int lastBid, String statusText) {
@@ -45,18 +40,26 @@ public class AuctionSniperDriver extends JFrameDriver {
         ));
     }
 
-    public void startBiddingFor(String itemId) {
+    public void startBiddingFor(String itemId, int stopPrice) {
         // "replaceAllText" seems subject to some random bugs. Here "selectAll" seems to fix that.
         itemIdField().selectAll();
-
         itemIdField().replaceAllText(itemId);
+
+        final JTextFieldDriver stopPriceField = textField(MainWindow.NEW_ITEM_STOP_PRICE_NAME);
+        stopPriceField.selectAll();
+        stopPriceField.replaceAllText(String.valueOf(stopPrice));
+
         bidButton().click();
     }
 
     private JTextFieldDriver itemIdField() {
-        JTextFieldDriver newItemId = new JTextFieldDriver(this, JTextField.class, named(MainWindow.NEW_ITEM_ID_NAME));
-        newItemId.focusWithMouse();
-        return newItemId;
+        return textField(MainWindow.NEW_ITEM_ID_NAME);
+    }
+
+    private JTextFieldDriver textField(String name) {
+        JTextFieldDriver field = new JTextFieldDriver(this, JTextField.class, named(name));
+        field.focusWithMouse();
+        return field;
     }
 
     private JButtonDriver bidButton() {

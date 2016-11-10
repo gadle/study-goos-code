@@ -24,6 +24,10 @@ public class SniperSnapshot {
         return new SniperSnapshot(itemId, lastPrice, lastBid, SniperState.WINNING);
     }
 
+    public SniperSnapshot losing(int lastPrice) {
+        return new SniperSnapshot(itemId, lastPrice, lastBid, SniperState.LOSING);
+    }
+
     public SniperSnapshot bidding(int lastPrice, int lastBid) {
         return new SniperSnapshot(itemId, lastPrice, lastBid, SniperState.BIDDING);
     }
@@ -45,5 +49,4 @@ public class SniperSnapshot {
     public String toString() {
         return ToStringBuilder.reflectionToString(this);
     }
-
 }

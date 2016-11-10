@@ -3,6 +3,7 @@ package test.goos.auction_sniper;
 import goos.auction_sniper.Auction;
 import goos.auction_sniper.AuctionEventListener;
 import goos.auction_sniper.AuctionHouse;
+import goos.auction_sniper.Item;
 import goos.auction_sniper.xmpp.XMPPAuctionHouse;
 import org.junit.Before;
 import org.junit.Test;
@@ -28,8 +29,9 @@ public class XMPPAuctionHouseTest {
 
     @Test public void receivesEventsFromAuctionServerAfterJoining() throws Exception {
         CountDownLatch auctionWasClosed = new CountDownLatch(1);
+        Item item = Item.create(auctionServer.getItemId(), Integer.MAX_VALUE);
 
-        Auction auction = auctionHouse.auctionFor(auctionServer.getItemId());
+        Auction auction = auctionHouse.auctionFor(item);
         auction.addAuctionEventListener(auctionClosedListener(auctionWasClosed));
 
         auction.join();

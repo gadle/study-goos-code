@@ -21,8 +21,9 @@ public class SniperLauncherTest {
 
     @Test public void addsNewSniperToCollectorAndThenJoinsAuction() {
         final String itemId = "item 123";
+        final Item item = Item.create(itemId, Integer.MAX_VALUE);
 
-        when(auctionHouse.auctionFor(itemId)).thenReturn(auction);
+        when(auctionHouse.auctionFor(item)).thenReturn(auction);
 
         doAnswer(states.verifyState(ObservedAuctionState.not_joined))
                 .when(auction).addAuctionEventListener(MockitoHamcrest.argThat(sniperForItem(itemId)));
@@ -30,7 +31,7 @@ public class SniperLauncherTest {
                 .when(sniperCollector).addSniper(MockitoHamcrest.argThat(sniperForItem(itemId)));
         doAnswer(states.setState(ObservedAuctionState.joined)).when(auction).join();
 
-        launcher.joinAuction(itemId);
+        launcher.joinAuction(item);
 
         verify(auction).addAuctionEventListener(MockitoHamcrest.argThat(sniperForItem(itemId)));
         verify(sniperCollector).addSniper(MockitoHamcrest.argThat(sniperForItem(itemId)));
